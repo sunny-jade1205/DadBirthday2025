@@ -1,6 +1,8 @@
 ﻿using Fusion;
 using UnityEngine;
+using UnityEngine.Scripting;
 
+[Preserve]
 public class NetworkBall : NetworkBehaviour
 {
     [SerializeField]
@@ -56,18 +58,18 @@ public class NetworkBall : NetworkBehaviour
             NetworkedRotation = targetRigidbody.rotation;
             NetworkedVelocity = targetRigidbody.velocity;
         }
-        else
+    }
+
+    public override void Render()
+    {
+        if (targetRigidbody == null)
         {
-            // Proxy 端用剛體移動以獲得較好的插值/穿透表現
-            if (targetRigidbody != null)
-            {
-                targetRigidbody.MovePosition(NetworkedPosition);
-                targetRigidbody.MoveRotation(NetworkedRotation);
-            }
-            else
-            {
-                transform.SetPositionAndRotation(NetworkedPosition, NetworkedRotation);
-            }
+            return;
+        }
+        if (!Object.HasStateAuthority)
+        {
+            targetRigidbody.MovePosition(NetworkedPosition);
+            targetRigidbody.MoveRotation(NetworkedRotation);
         }
     }
 }

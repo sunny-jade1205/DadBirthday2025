@@ -110,7 +110,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     }
     IEnumerator BurnBalls(NetworkRunner runner)
     {
-        for (int i = 0; i <= 1000; i++)
+        for (int i = 0; i <= 10; i++)
         {
             Vector2 planarOffset = UnityEngine.Random.insideUnitCircle * 0.4f;
             Vector3 spawnPosition = new Vector3(planarOffset.x, 0.5f, planarOffset.y);
