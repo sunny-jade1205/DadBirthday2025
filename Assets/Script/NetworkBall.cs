@@ -1,8 +1,6 @@
 ﻿using Fusion;
 using UnityEngine;
-using UnityEngine.Scripting;
 
-[Preserve]
 public class NetworkBall : NetworkBehaviour
 {
     [SerializeField]

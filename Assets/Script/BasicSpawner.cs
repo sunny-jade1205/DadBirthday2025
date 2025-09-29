@@ -110,25 +110,22 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     }
     IEnumerator BurnBalls(NetworkRunner runner)
     {
-        for (int i = 0; i <= 10; i++)
+        for (int i = 0; i <= 1000; i++)
         {
-            Vector2 planarOffset = UnityEngine.Random.insideUnitCircle * 0.4f;
-            Vector3 spawnPosition = new Vector3(planarOffset.x, 0.5f, planarOffset.y);
+            Vector3 spawnPosition = new Vector3(0f, 0.5f, 0f);
             NetworkObject networkBallObject = runner.Spawn(ballsPrefab, spawnPosition);
             if (runner.IsServer && networkBallObject != null)
             {
                 var spawnedRigidbody = networkBallObject.GetComponent<Rigidbody>();
                 if (spawnedRigidbody != null)
                 {
-                    Vector3 randomVelocity = new Vector3(
-                        UnityEngine.Random.Range(-1f, 1f),
-                        UnityEngine.Random.Range(0.5f, 2f),
-                        UnityEngine.Random.Range(-1f, 1f)
-                    );
+                    spawnedRigidbody.position = spawnPosition;
+
+                    Vector3 randomVelocity = new Vector3(0,-0.5f,0);
                     spawnedRigidbody.velocity = randomVelocity;
                 }
             }
-            yield return new WaitForSeconds(0.25f);
+            yield return new WaitForSeconds(0.8f);
         }
 
     }
