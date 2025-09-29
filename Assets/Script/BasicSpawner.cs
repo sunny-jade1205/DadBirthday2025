@@ -4,7 +4,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -113,7 +112,22 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     {
         for (int i = 0; i <= 1000; i++)
         {
-            NetworkObject networkBallObject = runner.Spawn(ballsPrefab, new Vector3(0, 0.5f, 0));
+            Vector2 planarOffset = UnityEngine.Random.insideUnitCircle * 0.4f;
+            Vector3 spawnPosition = new Vector3(planarOffset.x, 0.5f, planarOffset.y);
+            NetworkObject networkBallObject = runner.Spawn(ballsPrefab, spawnPosition);
+            if (runner.IsServer && networkBallObject != null)
+            {
+                var spawnedRigidbody = networkBallObject.GetComponent<Rigidbody>();
+                if (spawnedRigidbody != null)
+                {
+                    Vector3 randomVelocity = new Vector3(
+                        UnityEngine.Random.Range(-1f, 1f),
+                        UnityEngine.Random.Range(0.5f, 2f),
+                        UnityEngine.Random.Range(-1f, 1f)
+                    );
+                    spawnedRigidbody.velocity = randomVelocity;
+                }
+            }
             yield return new WaitForSeconds(0.25f);
         }
 
